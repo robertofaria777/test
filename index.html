@@ -2,159 +2,61 @@
 <html>
 <head>
     <title>GT4 European Misano 🇮🇹</title>
-    <style>
-        body {
-            background-color: #1A202C;
-            color: #A0AEC0;
-            font-family: Arial, sans-serif;
-            font-size: 125%; /* Increase the font size */
-            text-align: center; /* Center align the whole website */
-        }
-        .aston-martin-theme {
-            color: #006F62;
-        }
-        table, th, td {
-            border: 1px solid #A0AEC0;
-            padding: 20px; /* Increase the padding */
-            margin: 0 auto; /* Center align the table */
-        }
-        .highlight {
-            background-color: #006F62;
-            color: #A0AEC0;
-        }
-        #countdownTimer {
-            font-size: 2em; /* Make the countdown timer larger */
-            font-weight: bold; /* Make the countdown timer bold */
-        }
-        #countdownTimer span {
-            display: inline-block;
-            margin: 0 10px;
-        }
-        #countdownTimer span::after {
-            content: attr(data-label);
-            display: block;
-            font-size: 0.5em;
-            font-weight: normal;
-        }
-        #eventName {
-            font-size: 3em; /* Make the event name larger */
-            font-weight: bold; /* Make the event name bold */
-        }
-    </style>
+    <!-- Your existing CSS styles here -->
 </head>
 <body>
-    <header>
-        <h1 class="aston-martin-theme">GT4 European Misano 🇮🇹</h1>
-    </header>
-    <main>
-       <section id="countdown">
-            <h2 class="aston-martin-theme">Next session is:</h2>
-            <p id="eventName"></p> <!-- Add a new paragraph for the event name -->
-            <p id="countdownTimer"></p>
-        </section>
-<body>
-          <section id="timetable">
-            <h2 class="aston-martin-theme">Timetable Local 🇮🇹 (GMT+1)</h2>
-            <table class="highlight">
-                <tr>
-                    <th>Event</th>
-                    <th>Date</th>
-                    <th>Start</th>
-                    <th>End</th>
-                </tr>
-                <tr>
-                    <td>Qualy</td>
-                    <td>18/05</td>
-                    <td>09:35</td>
-                    <td>10:35</td>
-                </tr>
-                <tr>
-                    <td>Race 1</td>
-                    <td>18/05</td>
-                    <td>16:35</td>
-                    <td>17:35</td>
-                </tr>
-                <tr>
-                    <td>Race 2</td>
-                    <td>19/05</td>
-                    <td>12:15</td>
-                    <td>13:15</td>
-                </tr>
-            </table>
-        </section>
-        <section id="timetable-brazil">
-            <h2 class="aston-martin-theme">Timetable Brazil 🇧🇷 (GMT-3)</h2>
-            <table class="highlight">
-                <tr>
-                    <th>Event</th>
-                    <td>Date</td>
-                    <th>Start</th>
-                    <th>End</th>
-                </tr>
-                <tr>
-                    <td>Qualy</td>
-                    <td>18/05</td>
-                    <td>04:35</td>
-                    <td>05:35</td>
-                </tr>
-                <tr>
-                    <td>Race 1</td>
-                    <td>18/05</td>
-                    <td>11:35</td>
-                    <td>12:35</td>
-                </tr>
-                <tr>
-                    <td>Race 2</td>
-                    <td>19/05</td>
-                    <td>07:15</td>
-                    <td>08:15</td>
-                </tr>
-            </table>
-        </section>
-    
-    </main>
-    <footer>
-        <p>© 2024 Roberto Faria</p>
-    </footer>
-   <script>
+    <!-- Your existing HTML structure here -->
+
+    <script>
         async function loadEvents() {
-            const response = await fetch('events.csv');
-            const csv = await response.text();
-            const lines = csv.split('\n').slice(1); // Skip the header
-            return lines.map(line => {
-                const [name, start, end] = line.split(',');
-                return {name, start: new Date(start), end: new Date(end)};
-            });
+            // Your existing loadEvents function here
         }
 
         function formatTime(date) {
-            return date.toISOString().split('T')[1].slice(0, 5);
+            // Your existing formatTime function here
         }
 
         function formatDate(date) {
-            return date.toISOString().split('T')[0].slice(5).split('-').reverse().join('/');
+            // Your existing formatDate function here
         }
 
         async function populateTables() {
-            const events = await loadEvents();
-            const table1 = document.querySelector('#timetable table');
-            const table2 = document.querySelector('#timetable-brazil table');
-
-            for (const event of events) {
-                const row1 = document.createElement('tr');
-                row1.innerHTML = `<td>${event.name}</td><td>${formatDate(event.start)}</td><td>${formatTime(event.start)}</td><td>${formatTime(event.end)}</td>`;
-                table1.appendChild(row1);
-
-                const row2 = document.createElement('tr');
-                const startBrazil = new Date(event.start.getTime() - 5 * 60 * 60 * 1000);
-                const endBrazil = new Date(event.end.getTime() - 5 * 60 * 60 * 1000);
-                row2.innerHTML = `<td>${event.name}</td><td>${formatDate(startBrazil)}</td><td>${formatTime(startBrazil)}</td><td>${formatTime(endBrazil)}</td>`;
-                table2.appendChild(row2);
-            }
+            // Your existing populateTables function here
         }
 
-        populateTables();
-        startCountdown();
+        function startCountdown() {
+            const countdownElement = document.getElementById('countdownTimer');
+            const eventNameElement = document.getElementById('eventName');
+            const events = await loadEvents();
+            let countdownInterval;
+
+            function updateCountdown() {
+                const now = new Date();
+                const nextEvent = events.find(event => event.start > now);
+
+                if (nextEvent) {
+                    const timeLeft = Math.floor((nextEvent.start - now) / 1000); // Time left in seconds
+                    const hours = Math.floor(timeLeft / 3600);
+                    const minutes = Math.floor((timeLeft % 3600) / 60);
+                    const seconds = timeLeft % 60;
+
+                    countdownElement.textContent = `${hours}h ${minutes}m ${seconds}s`;
+                    eventNameElement.textContent = nextEvent.name;
+                } else {
+                    countdownElement.textContent = 'No upcoming events';
+                    eventNameElement.textContent = '';
+                    clearInterval(countdownInterval);
+                }
+            }
+
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000); // Update every second
+        }
+
+        window.onload = function() {
+            populateTables();
+            startCountdown();
+        };
     </script>
 </body>
 </html>
