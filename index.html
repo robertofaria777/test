@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GT4 European Misano 🇮🇹</title>
+    <style>
+        body {
+            background-color: #1A202C;
+            color: #A0AEC0;
+            font-family: Arial, sans-serif;
+            font-size: 125%; /* Increase the font size */
+            text-align: center; /* Center align the whole website */
+        }
+        .aston-martin-theme {
+            color: #006F62;
+        }
+        table, th, td {
+            border: 1px solid #A0AEC0;
+            padding: 20px; /* Increase the padding */
+            margin: 0 auto; /* Center align the table */
+        }
+        .highlight {
+            background-color: #006F62;
+            color: #A0AEC0;
+        }
+        #countdownTimer {
+            font-size: 2em; /* Make the countdown timer larger */
+            font-weight: bold; /* Make the countdown timer bold */
+        }
+        #countdownTimer span {
+            display: inline-block;
+            margin: 0 10px;
+        }
+        #countdownTimer span::after {
+            content: attr(data-label);
+            display: block;
+            font-size: 0.5em;
+            font-weight: normal;
+        }
+        #eventName {
+            font-size: 3em; /* Make the event name larger */
+            font-weight: bold; /* Make the event name bold */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="aston-martin-theme">GT4 European Misano 🇮🇹</h1>
+    </header>
+    <main>
+       <section id="countdown">
+            <h2 class="aston-martin-theme">Next session is:</h2>
+            <p id="eventName"></p> <!-- Add a new paragraph for the event name -->
+            <p id="countdownTimer"></p>
+        </section>
+<body>
+          <section id="timetable">
+            <h2 class="aston-martin-theme">Timetable Local 🇮🇹 (GMT+1)</h2>
+            <table class="highlight">
+                <tr>
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Start</th>
+                    <th>End</th>
+                </tr>
+                <tr>
+                    <td>Qualy</td>
+                    <td>18/05</td>
+                    <td>09:35</td>
+                    <td>10:35</td>
+                </tr>
+                <tr>
+                    <td>Race 1</td>
+                    <td>18/05</td>
+                    <td>16:35</td>
+                    <td>17:35</td>
+                </tr>
+                <tr>
+                    <td>Race 2</td>
+                    <td>19/05</td>
+                    <td>12:15</td>
+                    <td>13:15</td>
+                </tr>
+            </table>
+        </section>
+        <section id="timetable-brazil">
+            <h2 class="aston-martin-theme">Timetable Brazil 🇧🇷 (GMT-3)</h2>
+            <table class="highlight">
+                <tr>
+                    <th>Event</th>
+                    <td>Date</td>
+                    <th>Start</th>
+                    <th>End</th>
+                </tr>
+                <tr>
+                    <td>Qualy</td>
+                    <td>18/05</td>
+                    <td>04:35</td>
+                    <td>05:35</td>
+                </tr>
+                <tr>
+                    <td>Race 1</td>
+                    <td>18/05</td>
+                    <td>11:35</td>
+                    <td>12:35</td>
+                </tr>
+                <tr>
+                    <td>Race 2</td>
+                    <td>19/05</td>
+                    <td>07:15</td>
+                    <td>08:15</td>
+                </tr>
+            </table>
+        </section>
+    
+    </main>
+    <footer>
+        <p>© 2024 Roberto Faria</p>
+    </footer>
+    <script>
+        var events = [
+            {name: 'Qualy', start: new Date('2024-05-18T08:35:00'), end: new Date('2024-05-18T9:35:00')},
+            {name: 'Race 1', start: new Date('2024-05-18T15:35:00'), end: new Date('2024-05-18T16:35:00')},
+            {name: 'Race 2', start: new Date('2024-05-19T11:15:00'), end: new Date('2024-05-19T12:15:00')}
+        ];
+
+        function getNearestEvent(events) {
+            var now = new Date();
+            return events.reduce(function(nearest, event) {
+                return event.start > now && event.start < nearest.start ? event : nearest;
+            }, {start: Infinity});
+        }
+
+        function startCountdown() {
+            var nearestEvent = getNearestEvent(events);
+            document.getElementById("eventName").innerHTML = nearestEvent.name; /* Display the event name */
+            var countdown = setInterval(function() {
+                var now = new Date().getTime();
+                var distance = nearestEvent.start - now;
+
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("countdownTimer").innerHTML = 
+                    '<span data-label="DAYS">' + days + '</span>' +
+                    '<span data-label="HRS">' + hours + '</span>' +
+                    '<span data-label="MINS">' + minutes + '</span>' +
+                    '<span data-label="SECS">' + seconds + '</span>';
+
+                if (distance < 0) {
+                    clearInterval(countdown);
+                    document.getElementById("countdownTimer").innerHTML = nearestEvent.name + " has started";
+                }
+            }, 1000);
+        }
+
+        startCountdown();
+    </script>
+</body>
+</html>
