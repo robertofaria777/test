@@ -116,45 +116,45 @@
     <footer>
         <p>© 2024 Roberto Faria</p>
     </footer>
-    <script>
-       async function loadEvents() {
-    const response = await fetch('events.csv');
-    const csv = await response.text();
-    const lines = csv.split('\n').slice(1); // Skip the header
-    return lines.map(line => {
-        const [name, start, end] = line.split(',');
-        return {name, start: new Date(start), end: new Date(end)};
-    });
-}
-
-async function startCountdown() {
-    const events = await loadEvents();
-    var nearestEvent = getNearestEvent(events);
-    document.getElementById("eventName").innerHTML = nearestEvent.name; /* Display the event name */
-    var countdown = setInterval(function() {
-        var now = new Date().getTime();
-        var distance = nearestEvent.start - now;
-
-        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById("countdownTimer").innerHTML = 
-            '<span data-label="DAYS">' + days + '</span>' +
-            '<span data-label="HRS">' + hours + '</span>' +
-            '<span data-label="MINS">' + minutes + '</span>' +
-            '<span data-label="SECS">' + seconds + '</span>';
-
-        if (distance < 0) {
-            clearInterval(countdown);
-            document.getElementById("countdownTimer").innerHTML = nearestEvent.name + " has started";
+   <script>
+        async function loadEvents() {
+            const response = await fetch('events.csv');
+            const csv = await response.text();
+            const lines = csv.split('\n').slice(1); // Skip the header
+            return lines.map(line => {
+                const [name, start, end] = line.split(',');
+                return {name, start: new Date(start), end: new Date(end)};
+            });
         }
-    }, 1000);
-}
 
-startCountdown();
+        function formatTime(date) {
+            return date.toISOString().split('T')[1].slice(0, 5);
+        }
 
+        function formatDate(date) {
+            return date.toISOString().split('T')[0].slice(5).split('-').reverse().join('/');
+        }
+
+        async function populateTables() {
+            const events = await loadEvents();
+            const table1 = document.querySelector('#timetable table');
+            const table2 = document.querySelector('#timetable-brazil table');
+
+            for (const event of events) {
+                const row1 = document.createElement('tr');
+                row1.innerHTML = `<td>${event.name}</td><td>${formatDate(event.start)}</td><td>${formatTime(event.start)}</td><td>${formatTime(event.end)}</td>`;
+                table1.appendChild(row1);
+
+                const row2 = document.createElement('tr');
+                const startBrazil = new Date(event.start.getTime() - 5 * 60 * 60 * 1000);
+                const endBrazil = new Date(event.end.getTime() - 5 * 60 * 60 * 1000);
+                row2.innerHTML = `<td>${event.name}</td><td>${formatDate(startBrazil)}</td><td>${formatTime(startBrazil)}</td><td>${formatTime(endBrazil)}</td>`;
+                table2.appendChild(row2);
+            }
+        }
+
+        populateTables();
+        startCountdown();
     </script>
 </body>
 </html>
