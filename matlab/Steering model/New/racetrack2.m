@@ -1,4 +1,4 @@
-filename = 'C:\Users\fyrf2\Downloads\monza-graphic.jpeg';
+filename = 'C:\Users\User\Desktop\APP Development\test\matlab\Steering model\New\monza-graphic.jpeg';
 rgb = imread(filename);
 
 Red   = rgb(:,:,1);
