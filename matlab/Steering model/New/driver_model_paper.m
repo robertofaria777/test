@@ -13,7 +13,8 @@ function [delta_cmd, next_idx] = driver_model_paper(X, Y, psi, u, delta_prev, ro
     % Outputs:
     %   delta_cmd  : Commanded steering angle (rad)
     %   next_idx   : Updated index for the current track segment
-    
+    params.Tp = 2
+    params.Klat = 0.5
     % --- Extract Parameters ---
     Tp = params.Tp;       % Preview time (s)
     Klat = params.Klat;   % Lateral gain
