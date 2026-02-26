@@ -28,6 +28,22 @@ roadX = interp1(t, x_smooth, ti, 'pchip')';
 roadY = interp1(t, y_smooth, ti, 'pchip')';
 road = [roadX roadY];
 
+% FIX 1: Flip Y axis — image Y increases downward, world Y increases upward
+road(:,2) = -road(:,2);
+
+% FIX 2: Shift track so first point is at world origin (0,0)
+% Vehicle starts at X=0, Y=0, so the track must start there too
+road = road - road(1,:);
+
+% FIX 3: Scale from pixels to metres
+% Monza circuit total length is approx 5793m
+road_length_px = sum(sqrt(sum(diff(road).^2, 2)));
+road_scale = 5793 / road_length_px;  % metres per pixel
+road = road * road_scale;
+
+% Sample time for discrete blocks (matches Simulink solver fixed step)
+dt = 0.1;  % 100ms timestep
+
 % Steering Controller Parameters
 steer_params.Tp   = 0.5;    
 steer_params.Klat = 0.1;    
@@ -122,6 +138,11 @@ woff = [wf; wf; wr; wr]/2;
 % (match wheel speeds and forward speed)
 x0 = zeros(10,1);
 x0(1) = u0;
+% FIX 4: Set initial heading to match first track segment direction
+% psi is state index 9 in the 6DOF model
+track_dir  = road(2,:) - road(1,:);
+psi0       = atan2(track_dir(2), track_dir(1));
+x0(9)      = psi0;
 w0 = u0/rr*ones(4,1);
 
 % parameters needed for vehicle BODY dynamics function
