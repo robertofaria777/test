@@ -35,7 +35,7 @@ steer_params.L    = 2.83; % Matching vehicle wheelbase
 steer_params.Kug  = 0.0;
 % delta0     = 0;   % Initial steering angle for Unit Delay 
 % prev_idx0  = 1;   % Initial track index for Unit Delay 
-% Already done via step delay block
+% Already done via step delay bl
 
 % ADMINISTRATIVE INITIALISATION
 o4 = ones(4,1);
