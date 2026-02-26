@@ -5,7 +5,7 @@
 
 
 % INITIAL CONDITIONS (see also state and wheel speed i/c setting, below) :
-u0 = 5;        
+u0 = 12;        
 cruise = 1;    
 
 % STEERING MODEL TRACK GENERATION
