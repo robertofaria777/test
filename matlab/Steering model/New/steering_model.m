@@ -3,7 +3,7 @@ function delta_cmd = steering_model(X, Y, psi, u, delta_prev, road, params)
     g = 9.81; %gravity
 
     % Driver parameters (need to change later)
-    Tp   = 2.5;   % preview time seconds
+    Tp   = 1.5;   % preview time seconds
     Klat = 0.2;   % lateral gain
 
     % preview distance along the path

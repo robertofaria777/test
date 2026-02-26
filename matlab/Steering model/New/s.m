@@ -1,6 +1,6 @@
 clear; clc; close all;
 %Race track
-filename = 'C:\Users\fyrf2\OneDrive - Loughborough University\Uni\Year 3\Final Project\matlab\Steering model\New\monza-graphic.jpeg';
+filename = 'C:\Users\User\Desktop\APP Development\test\matlab\Steering model\New\monza-graphic.jpeg';
 rgb = imread(filename);
 
 Red   = rgb(:,:,1);
@@ -73,7 +73,7 @@ params.Klat = 0.2;                        % lateral gain
 params.L    = 2.6;                        % wheelbase
 
 % simulation settings
-dt = 0.001;      %Time interval
+dt = 0.01;      %Time interval
 T  = 500;       %Time seconds
 N  = round(T/dt);
 path = zeros(N,2);

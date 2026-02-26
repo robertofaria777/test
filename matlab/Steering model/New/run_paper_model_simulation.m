@@ -1,118 +1,131 @@
 % RUN_PAPER_MODEL_SIMULATION
-% This script runs the simulation for the 'driver_model_paper.m'
-% It attempts to load the track from 'racetrack2.m', or falls back to a default oval.
 
 clear; clc; close all;
 
-% --- 1. Load Track ---
-try
-    % Try extracting track from the user's file
-    disp('Attempting to run racetrack2.m to load track...');
-    racetrack2; 
+%Track Generation
+filename = 'C:\Users\User\Desktop\APP Development\test\matlab\Steering model\New\monza-graphic.jpeg';
+
+    rgb = imread(filename);
     
-    % racetrack2 produces 'x' and 'y' vectors
-    road_x = x;
-    road_y = y;
-    disp('Track loaded efficiently from racetrack2.');
-catch ME
-    warning('Could not run racetrack2.m (possibly missing image file). Using default oval track.');
-    % Fallback: Generate an oval track
-    t = linspace(0, 2*pi, 200)';
-    road_x = 100 * cos(t);
-    road_y = 50 * sin(t);
-end
+    Red   = rgb(:,:,1);
+    Green = rgb(:,:,2);
+    Blue  = rgb(:,:,3);
+    
+    % Binary mask
+    bw = Blue > 150 & Red < 128;
+    
+    % Extract boundaries
+    B = bwboundaries(bw);
+    
+    % Use only one boundary (e.g. the first)
+    boundary = B{1};
+    
+    % Original coordinates
+    x = boundary(:,2);
+    y = boundary(:,1);
+    
+    % 1) Moving average smoothing
+    windowSize = 25;   % Smooth out the jagged pixel edges
+    x_smooth = movmean(x, windowSize);
+    y_smooth = movmean(y, windowSize);
+    
+    % 2) Increase resolution by interpolation
+    N_points = numel(x_smooth);
+    t = 1:N_points;                
+    ti = linspace(1, N_points, N_points * 10); % Upsample 10x
+    
+    % Smooth interpolation
+    roadX = interp1(t, x_smooth, ti, 'pchip')';
+    roadY = interp1(t, y_smooth, ti, 'pchip')';
+    
+    
 
-% Combine into road matrix [x, y]
-road = [road_x, road_y];
+road = [roadX roadY];
 
-% Smooth/Interpolate if necessary (optional)
-% Ensure road is dense enough for the model logic
-if size(road,1) < 100
-   % Simple interpolation
-   t_old = 1:size(road,1);
-   t_new = linspace(1, size(road,1), 500)';
-   road = interp1(t_old, road, t_new, 'spline');
-end
+%Simulation Setup
+% Set initial state near the start of the loaded track
+start_idx = 1;
+startpos = road(start_idx, :);
 
-% --- 2. Simulation Setup ---
-% Initial Vehicle State (Start at beginning of road)
-X = road(1, 1);
-Y = road(1, 2);
-psi = atan2(road(2,2)-road(1,2), road(2,1)-road(1,1)); % Aligned with track
-u = 20; % Constant speed 20 m/s
-delta = 0; % Steering angle
+X   = startpos(1);
+Y   = startpos(2);
+
+% Calculate initial heading based on track tangent
+p1 = road(start_idx, :);
+p2 = road(min(start_idx+5, size(road,1)), :); % Look a few points ahead for tangent
+psi = atan2(p2(2)-p1(2), p2(1)-p1(1)); 
+
+u   = 20;    % speed m/s
+delta = 0; % steering angle
 
 % Parameters
-params.Tp = 0.8;    % Preview time (s)
-params.Klat = 0.15; % Lateral gain
-params.L = 2.5;     % Wheelbase (m)
-params.Kug = 0.0;   % Understeer gradient
+params.Tp   = 0.5;    % Used in the paper
+params.Klat = 0.1;    % Lower gain for stability
+params.L    = 2.6;    % Wheelbase 
+params.Kug  = 0.0; 
 
-% Simulation Loop
-dt = 0.05;
-T_final = 60; % seconds
-N_steps = round(T_final / dt);
+% Simulation Settings
+dt = 0.01;        % Time interval 
+T  = 500;         % Duration
+N_sim  = round(T/dt);
 
-% Storage for Plotting
-history.x = zeros(N_steps, 1);
-history.y = zeros(N_steps, 1);
-history.psi = zeros(N_steps, 1);
-history.delta = zeros(N_steps, 1);
-history.preview_p = zeros(N_steps, 2);
+% Storage
+history.x = zeros(N_sim, 1);
+history.y = zeros(N_sim, 1);
+history.psi = zeros(N_sim, 1);
+history.delta = zeros(N_sim, 1);
 
-prev_idx = 1; % For optimization in driver model
+prev_idx = 1;
 
-figure('Name', 'Steering Model Simulation', 'Color', 'w');
-plot(road(:,1), road(:,2), 'k--', 'LineWidth', 2); hold on;
-hCar = plot(X, Y, 'bo', 'MarkerFaceColor', 'b');
-hPred = plot(X, Y, 'gx', 'MarkerSize', 8);
-axis equal; grid on;
+% Setup Figure
+figure('Name', 'Steering Control', 'Color', 'w');
+plot(road(:,1), road(:,2), 'k--','LineWidth',2); hold on;
+hCar = plot(X, Y, 'bo', 'MarkerFaceColor', 'b', 'MarkerSize', 6);
+hPred = plot(X, Y, 'gx', 'MarkerSize', 8, 'LineWidth', 2);
+axis equal; grid on; set(gca,'YDir','reverse'); % Image coordinates often need reverse Y
 xlabel('X (m)'); ylabel('Y (m)');
-title('Paper Driver Model Simulation');
+legend('Road','Vehicle','Preview P','Location','best');
+title('Steering Control - Paper Model');
 
 disp('Starting simulation...');
 
-for k = 1:N_steps
-    % 1. Store History
+for k = 1:N_sim
     history.x(k) = X;
     history.y(k) = Y;
     history.psi(k) = psi;
     history.delta(k) = delta;
     
-    % 2. Call Driver Model
-    % [delta_cmd, next_idx] = driver_model_paper(X, Y, psi, u, delta_prev, road, params, prev_idx)
-    [delta_cmd, prev_idx] = driver_model_paper(X, Y, psi, u, delta, road, params, prev_idx);
+    % --- Call Driver Model ---
+    [delta_cmd, prev_idx, debug] = driver_model_paper(X, Y, psi, u, delta, road, params, prev_idx);
     
-    % 3. Vehicle Dynamics (Kinematic Bicycle)
+    % --- Vehicle Dynamics ---
+    % Standard kinematic bicycle
     % x_dot = u * cos(psi)
     % y_dot = u * sin(psi)
     % psi_dot = (u/L) * tan(delta)
     
-    X = X + u * cos(psi) * dt;
-    Y = Y + u * sin(psi) * dt;
-    psi = psi + (u / params.L) * tan(delta) * dt;
+    X   = X + u*cos(psi)*dt;
+    Y   = Y + u*sin(psi)*dt;
+    psi = psi + (u/params.L)*tan(delta)*dt;
     
-    % Actuator dynamics (simple lag) or direct assignment
-    delta = delta_cmd; 
+    delta = delta_cmd; % No actuator lag in user snippet
     
-    % 4. Visualization Update (every 10 steps for speed)
-    if mod(k, 5) == 0
+    % Visualization
+    if mod(k, 10) == 0
         set(hCar, 'XData', X, 'YData', Y);
-        
-        % Re-calculate P just for plotting standard visualization (driver_model calculates it internally)
-        % For speed, we won't extract P from the function unless we modify the function to return it.
-        % Let's just draw the car.
+        if isfield(debug, 'P')
+            set(hPred, 'XData', debug.P(1), 'YData', debug.P(2));
+        end
         drawnow limitrate;
     end
     
-    % Stop if we looped roughly (simple check)
-    if k > 200 && norm([X,Y] - road(1,:)) < 5
-        disp('Lap Completed!');
+    % Stop if completed lap (approx)
+    if k > 500 && norm([X,Y] - startpos) < 5
+        disp('Lap completed.');
         break;
     end
 end
 
-% Final Plot
-plot(history.x(1:k), history.y(1:k), 'b-', 'LineWidth', 1.5);
-legend('Track', 'Final Position', 'Start', 'Trajectory');
-disp('Simulation Finished.');
+% Plot Trajectory
+plot(history.x(1:k), history.y(1:k), 'r-', 'LineWidth', 1.5);
+disp('Done.');
