@@ -45,8 +45,8 @@ road = road * road_scale;
 dt = 0.1;  % 100ms timestep
 
 % Steering Controller Parameters
-steer_params.Tp   = 0.5;    
-steer_params.Klat = 0.1;    
+steer_params.Tp   = 1.5;    
+steer_params.Klat = 0.03;    
 steer_params.L    = 2.83; % Matching vehicle wheelbase
 steer_params.Kug  = 0.0;
 % delta0     = 0;   % Initial steering angle for Unit Delay 
