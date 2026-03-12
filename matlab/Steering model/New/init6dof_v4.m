@@ -5,17 +5,7 @@
 
 
 % INITIAL CONDITIONS (see also state and wheel speed i/c setting, below) :
-u0 = 15
-
-% --- Vehicle path ---
-% If X/Y are timeseries objects use X.Data, otherwise use directly
-if isstruct(X), vx = X.Data(:); vy = Y.Data(:);
-else,           vx = X(:);      vy = Y(:);  end
-plot(vx, vy, 'b-', 'LineWidth', 2, 'DisplayName','Vehicle path');
-plot(vx(1), vy(1), 'go', 'MarkerSize',10, 'MarkerFaceColor','g', 'DisplayName','Start');
-plot(vx(end), vy(end), 'rs', 'MarkerSize',10, 'MarkerFaceColor','r', 'DisplayName','End');
-
-legend; title('Vehicle Path vs Track'); xlabel('X (m)'); ylabel('Y (m)'); 
+u0 = 10;
 cruise = 1;    
 
 % STEERING MODEL TRACK GENERATION
@@ -55,14 +45,19 @@ road = road * road_scale;
 dt = 0.01;  % 100ms timestep
 
 % Steering Controller Parameters
-steer_params.Tp   = 0.5;    
-steer_params.Klat = 0.1;    
+steer_params.Tp   = 0.7;    
+steer_params.Klat = 0.07;    
 steer_params.L    = 2.83; % Matching vehicle wheelbase
 steer_params.Kug  = 0.0;
 % delta0     = 0;   % Initial steering angle for Unit Delay 
 % prev_idx0  = 1;   % Initial track index for Unit Delay 
 % Already done via step delay block
 
+%Cruise Control Parameters
+cruise_params.Tp     = 3;
+cruise_params.ay_max = 7;
+cruise_params.u_min  = 2;
+cruise_params.u_max  = 20;  % 72 km/h max straight speed
 % ADMINISTRATIVE INITIALISATION
 o4 = ones(4,1);
 TINY = 1e-5;
