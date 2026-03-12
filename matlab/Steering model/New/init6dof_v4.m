@@ -5,7 +5,7 @@
 
 
 % INITIAL CONDITIONS (see also state and wheel speed i/c setting, below) :
-u0 = 20
+u0 = 15
 
 % --- Vehicle path ---
 % If X/Y are timeseries objects use X.Data, otherwise use directly
@@ -15,8 +15,7 @@ plot(vx, vy, 'b-', 'LineWidth', 2, 'DisplayName','Vehicle path');
 plot(vx(1), vy(1), 'go', 'MarkerSize',10, 'MarkerFaceColor','g', 'DisplayName','Start');
 plot(vx(end), vy(end), 'rs', 'MarkerSize',10, 'MarkerFaceColor','r', 'DisplayName','End');
 
-legend; title('Vehicle Path vs Track'); xlabel('X (m)'); ylabel('Y (m)');
-;        
+legend; title('Vehicle Path vs Track'); xlabel('X (m)'); ylabel('Y (m)'); 
 cruise = 1;    
 
 % STEERING MODEL TRACK GENERATION
@@ -53,11 +52,11 @@ road_scale = 5793 / road_length_px;  % metres per pixel
 road = road * road_scale;
 
 % Sample time for discrete blocks (matches Simulink solver fixed step)
-dt = 0.1;  % 100ms timestep
+dt = 0.01;  % 100ms timestep
 
 % Steering Controller Parameters
-steer_params.Tp   = 1.5;    
-steer_params.Klat = 0.03;    
+steer_params.Tp   = 0.5;    
+steer_params.Klat = 0.1;    
 steer_params.L    = 2.83; % Matching vehicle wheelbase
 steer_params.Kug  = 0.0;
 % delta0     = 0;   % Initial steering angle for Unit Delay 

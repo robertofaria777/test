@@ -48,8 +48,8 @@ __MWOPC_PART_BEGIN__ /metadata/coreProperties.xml
   <dcterms:created xsi:type="dcterms:W3CDTF">2007-06-27T09:06:48Z</dcterms:created>
   <dc:creator>ttmcb</dc:creator>
   <cp:lastModifiedBy>User</cp:lastModifiedBy>
-  <dcterms:modified xsi:type="dcterms:W3CDTF">2026-02-27T00:48:34Z</dcterms:modified>
-  <cp:revision>32.7</cp:revision>
+  <dcterms:modified xsi:type="dcterms:W3CDTF">2026-02-26T08:28:08Z</dcterms:modified>
+  <cp:revision>32.6</cp:revision>
   <cp:version>R2025b</cp:version>
 </cp:coreProperties>
 
@@ -131,7 +131,7 @@ __MWOPC_PART_BEGIN__ /simulink/blockdiagram.xml
     <ConfigManagerSettings>
       <P Name="ModifiedByFormat">%&lt;Auto&gt;</P>
       <P Name="ModifiedDateFormat">%&lt;Auto&gt;</P>
-      <P Name="ModelVersionFormat">%&lt;AutoIncrement:32.7&gt;</P>
+      <P Name="ModelVersionFormat">%&lt;AutoIncrement:32.6&gt;</P>
     </ConfigManagerSettings>
     <EditorSettings>
       <P Name="LibraryLinkDisplay">none</P>
@@ -1267,7 +1267,7 @@ __MWOPC_PART_BEGIN__ /simulink/ScheduleCore.xml
             <hasBlocks>true</hasBlocks>
             <rateIndex>2</rateIndex>
             <rateSpec type="sltp.mm.core.RateSpec">
-              <period>.01</period>
+              <period>.1</period>
             </rateSpec>
             <sti>2</sti>
           </rates>
@@ -1316,7 +1316,7 @@ __MWOPC_PART_BEGIN__ /simulink/ScheduleEditor.xml
         <rates type="sltp.mm.syntax.RateData">
           <color>#ff453a</color>
           <hasBlocks>true</hasBlocks>
-          <rate>0.01</rate>
+          <rate>0.1</rate>
           <title>D1</title>
         </rates>
         <title>Cont</title>
@@ -2215,8 +2215,6 @@ __MWOPC_PART_BEGIN__ /simulink/stateflow/chart_60.xml
   <P Name="viewLimits">[0 156.75 0 153.75]</P>
   <P Name="screen">[1 1 1280 1024 1.333333333333333]</P>
   <P Name="viewObj">60</P>
-  <P Name="visible">1</P>
-  <subviewS/>
   <P Name="ssIdHighWaterMark">17</P>
   <P Name="decomposition">CLUSTER_CHART</P>
   <P Name="type">EML_CHART</P>
@@ -2315,6 +2313,8 @@ end;
 return;
 
 </P>
+        <P Name="editorLayout" Class="double">Matrix(4,1)
+[198.0, 76.0, 831.0, 746.0]</P>
         <P Name="fimathString">fimath(...
 &apos;RoundMode&apos;, &apos;floor&apos;,...
 &apos;OverflowMode&apos;, &apos;wrap&apos;,...
@@ -2534,7 +2534,7 @@ return;
         <P Name="intersection">[1 0 -1 0 23.5747 42.5747 0 0]</P>
       </dst>
       <P Name="midPoint">[23.5747 24.9468]</P>
-      <P Name="dataLimits">[21.175 25.975 14.625 42.575]</P>
+      <P Name="dataLimits">[23.575 23.575 14.625 34.575]</P>
       <P Name="subviewer">60</P>
       <P Name="drawStyle">SMART</P>
       <slide>
@@ -2701,7 +2701,7 @@ __MWOPC_PART_BEGIN__ /simulink/systems/system_133.xml
 __MWOPC_PART_BEGIN__ /simulink/systems/system_134.xml
 <?xml version="1.0" encoding="utf-8"?>
 <System>
-  <P Name="Location">[-1, -8, 2561, 1393]</P>
+  <P Name="Location">[334, 100, 1119, 817]</P>
   <Block BlockType="Inport" Name="corner verticall&#xA;displacements (down positive)" SID="286">
     <P Name="Position">[100, 200, 120, 220]</P>
     <P Name="ZOrder">-1</P>
@@ -3496,7 +3496,7 @@ __MWOPC_PART_BEGIN__ /simulink/systems/system_351.xml
 <?xml version="1.0" encoding="utf-8"?>
 <System>
   <P Name="Location">[-1, -8, 2561, 1393]</P>
-  <P Name="ZoomFactor">300</P>
+  <P Name="ZoomFactor">400</P>
   <Block BlockType="Inport" Name="tread&#xA;speeds" SID="352">
     <P Name="Position">[20, 68, 50, 82]</P>
     <P Name="ZOrder">-1</P>
@@ -4192,7 +4192,7 @@ __MWOPC_PART_BEGIN__ /simulink/systems/system_4.xml
 <?xml version="1.0" encoding="utf-8"?>
 <System>
   <P Name="Location">[-1, -8, 2561, 1393]</P>
-  <P Name="ZoomFactor">175</P>
+  <P Name="ZoomFactor">300</P>
   <Block BlockType="Inport" Name="drive or brake&#xA;torque" SID="318">
     <P Name="Position">[60, 113, 90, 127]</P>
     <P Name="ZOrder">-1</P>
@@ -4677,6 +4677,7 @@ __MWOPC_PART_BEGIN__ /simulink/systems/system_root.xml
 <System>
   <P Name="Location">[-1, -8, 2561, 1393]</P>
   <P Name="Open">on</P>
+  <P Name="ZoomFactor">150</P>
   <P Name="ReportName">simulink-default.rpt</P>
   <P Name="SIDHighWatermark">432</P>
   <Block BlockType="SubSystem" Name=" Combined Slip Tyre Model" SID="1">
@@ -4872,14 +4873,14 @@ __MWOPC_PART_BEGIN__ /simulink/systems/system_root.xml
   <Block BlockType="UnitDelay" Name="Unit Delay" SID="430">
     <P Name="Position">[635, 108, 670, 142]</P>
     <P Name="ZOrder">3</P>
-    <P Name="SampleTime">dt</P>
+    <P Name="SampleTime">-1</P>
     <P Name="HasFrameUpgradeWarning">on</P>
   </Block>
   <Block BlockType="UnitDelay" Name="Unit Delay1" SID="431">
     <P Name="Position">[855, 48, 890, 82]</P>
     <P Name="ZOrder">4</P>
     <P Name="InitialCondition">1</P>
-    <P Name="SampleTime">dt</P>
+    <P Name="SampleTime">-1</P>
     <P Name="HasFrameUpgradeWarning">on</P>
   </Block>
   <Block BlockType="SubSystem" Name="slip lags" SID="270">
@@ -5129,28 +5130,18 @@ __MWOPC_PART_BEGIN__ /simulink/windowsInfo.xml
       <Object PropName="ExplorerBarInfo" ObjectID="4" ClassName="Simulink.ExplorerBarInfo">
         <P Name="Visible" Class="logical">1</P>
       </Object>
-      <Array PropName="EditorsInfo" Type="Simulink.EditorInfo" Dimension="1*8">
+      <Array PropName="EditorsInfo" Type="Simulink.EditorInfo" Dimension="1*6">
         <Object ObjectID="5">
           <P Name="IsActive" Class="logical">1</P>
           <P Name="IsTabbed" Class="logical">1</P>
           <P Name="ViewObjType" Class="char">SimulinkTopLevel</P>
           <P Name="LoadSaveID" Class="char">0</P>
           <P Name="Extents" Class="double">[2210.0, 953.0]</P>
-          <P Name="ZoomFactor" Class="double">1.0</P>
-          <P Name="Offset" Class="double">[-86.8902901785682, -232.68809523809455]</P>
-          <P Name="SceneRectInView" Class="double">[-86.8902901785682, -232.68809523809455, 2210.0, 953.0]</P>
+          <P Name="ZoomFactor" Class="double">1.5</P>
+          <P Name="Offset" Class="double">[-23.127194940473487, -99.235714285713357]</P>
+          <P Name="SceneRectInView" Class="double">[-23.127194940473487, -99.235714285713357, 1473.3333333333333, 635.33333333333337]</P>
         </Object>
         <Object ObjectID="6">
-          <P Name="IsActive" Class="logical">0</P>
-          <P Name="IsTabbed" Class="logical">0</P>
-          <P Name="ViewObjType" Class="char">SimulinkSubsys</P>
-          <P Name="LoadSaveID" Class="char">351</P>
-          <P Name="Extents" Class="double">[2210.0, 953.0]</P>
-          <P Name="ZoomFactor" Class="double">3.0</P>
-          <P Name="Offset" Class="double">[-41.835621611577267, -31.856925498425909]</P>
-          <P Name="SceneRectInView" Class="double">[-41.835621611577267, -31.856925498425909, 736.66666666666663, 317.66666666666669]</P>
-        </Object>
-        <Object ObjectID="7">
           <P Name="IsActive" Class="logical">0</P>
           <P Name="IsTabbed" Class="logical">0</P>
           <P Name="ViewObjType" Class="char">SimulinkSubsys</P>
@@ -5160,27 +5151,7 @@ __MWOPC_PART_BEGIN__ /simulink/windowsInfo.xml
           <P Name="Offset" Class="double">[-247.66831124202366, -32.571649484535556]</P>
           <P Name="SceneRectInView" Class="double">[-247.66831124202366, -32.571649484535556, 1291.0652920962198, 680.58419243986248]</P>
         </Object>
-        <Object ObjectID="8">
-          <P Name="IsActive" Class="logical">0</P>
-          <P Name="IsTabbed" Class="logical">0</P>
-          <P Name="ViewObjType" Class="char">SimulinkSubsys</P>
-          <P Name="LoadSaveID" Class="char">4</P>
-          <P Name="Extents" Class="double">[2210.0, 953.0]</P>
-          <P Name="ZoomFactor" Class="double">1.75</P>
-          <P Name="Offset" Class="double">[-250.97617630571392, -52.973342327487131]</P>
-          <P Name="SceneRectInView" Class="double">[-250.97617630571392, -52.973342327487131, 1262.8571428571429, 544.57142857142856]</P>
-        </Object>
-        <Object ObjectID="9">
-          <P Name="IsActive" Class="logical">0</P>
-          <P Name="IsTabbed" Class="logical">0</P>
-          <P Name="ViewObjType" Class="char">SimulinkSubsys</P>
-          <P Name="LoadSaveID" Class="char">134</P>
-          <P Name="Extents" Class="double">[2210.0, 953.0]</P>
-          <P Name="ZoomFactor" Class="double">1.0</P>
-          <P Name="Offset" Class="double">[-633.10100446428635, -110.13095238095252]</P>
-          <P Name="SceneRectInView" Class="double">[-633.10100446428635, -110.13095238095252, 2210.0, 953.0]</P>
-        </Object>
-        <Object ObjectID="10">
+        <Object ObjectID="7">
           <P Name="IsActive" Class="logical">0</P>
           <P Name="IsTabbed" Class="logical">0</P>
           <P Name="ViewObjType" Class="char">StudioAdapterBlock</P>
@@ -5190,29 +5161,39 @@ __MWOPC_PART_BEGIN__ /simulink/windowsInfo.xml
           <P Name="Offset" Class="double">[0.0, 0.0]</P>
           <P Name="SceneRectInView" Class="double">[0.0, 0.0, 0.0, 0.0]</P>
         </Object>
-        <Object ObjectID="11">
+        <Object ObjectID="8">
           <P Name="IsActive" Class="logical">0</P>
           <P Name="IsTabbed" Class="logical">0</P>
           <P Name="ViewObjType" Class="char">StudioAdapterBlock</P>
           <P Name="LoadSaveID" Class="char">3</P>
-          <P Name="Extents" Class="double">[2210.0, 953.0]</P>
+          <P Name="Extents" Class="double">[2522.0, 1165.0]</P>
           <P Name="ZoomFactor" Class="double">1.0</P>
           <P Name="Offset" Class="double">[0.0, 0.0]</P>
           <P Name="SceneRectInView" Class="double">[0.0, 0.0, 0.0, 0.0]</P>
         </Object>
-        <Object ObjectID="12">
+        <Object ObjectID="9">
           <P Name="IsActive" Class="logical">0</P>
           <P Name="IsTabbed" Class="logical">0</P>
-          <P Name="ViewObjType" Class="char">StudioAdapterBlock</P>
-          <P Name="LoadSaveID" Class="char">1</P>
-          <P Name="Extents" Class="double">[2210.0, 953.0]</P>
-          <P Name="ZoomFactor" Class="double">1.0</P>
-          <P Name="Offset" Class="double">[0.0, 0.0]</P>
-          <P Name="SceneRectInView" Class="double">[0.0, 0.0, 0.0, 0.0]</P>
+          <P Name="ViewObjType" Class="char">SimulinkSubsys</P>
+          <P Name="LoadSaveID" Class="char">4</P>
+          <P Name="Extents" Class="double">[2522.0, 1165.0]</P>
+          <P Name="ZoomFactor" Class="double">3.0</P>
+          <P Name="Offset" Class="double">[6.4929687499998749, 9.8333333333333428]</P>
+          <P Name="SceneRectInView" Class="double">[6.4929687499998749, 9.8333333333333428, 840.66666666666663, 388.33333333333331]</P>
+        </Object>
+        <Object ObjectID="10">
+          <P Name="IsActive" Class="logical">0</P>
+          <P Name="IsTabbed" Class="logical">0</P>
+          <P Name="ViewObjType" Class="char">SimulinkSubsys</P>
+          <P Name="LoadSaveID" Class="char">351</P>
+          <P Name="Extents" Class="double">[2522.0, 1165.0]</P>
+          <P Name="ZoomFactor" Class="double">4.0</P>
+          <P Name="Offset" Class="double">[1.6567708333335531, -19.299999999999869]</P>
+          <P Name="SceneRectInView" Class="double">[1.6567708333335531, -19.299999999999869, 630.5, 291.25]</P>
         </Object>
       </Array>
       <Array PropName="DockComponentsInfo" Type="Simulink.DockComponentInfo" Dimension="1*3">
-        <Object ObjectID="13">
+        <Object ObjectID="11">
           <P Name="Type" Class="char">GLUE2:PropertyInspector</P>
           <P Name="ID" Class="char">Property Inspector</P>
           <P Name="Visible" Class="logical">0</P>
@@ -5224,7 +5205,7 @@ __MWOPC_PART_BEGIN__ /simulink/windowsInfo.xml
           <P Name="Height" Class="int32">480</P>
           <P Name="Minimized" Class="char">Unset</P>
         </Object>
-        <Object ObjectID="14">
+        <Object ObjectID="12">
           <P Name="Type" Class="char">Simulink:Editor:ReferencedFiles</P>
           <P Name="ID" Class="char">Referenced Files</P>
           <P Name="Visible" Class="logical">0</P>
@@ -5237,7 +5218,7 @@ __MWOPC_PART_BEGIN__ /simulink/windowsInfo.xml
           <P Name="Height" Class="int32">480</P>
           <P Name="Minimized" Class="char">Unset</P>
         </Object>
-        <Object ObjectID="15">
+        <Object ObjectID="13">
           <P Name="Type" Class="char">LibraryBrowser2 LibraryBrowserStudioComponent</P>
           <P Name="ID" Class="char">sixdof_v4</P>
           <P Name="Visible" Class="logical">1</P>
