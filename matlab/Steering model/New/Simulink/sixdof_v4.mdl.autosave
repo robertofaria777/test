@@ -1872,8 +1872,12 @@ __MWOPC_PART_BEGIN__ /simulink/stateflow/chart_37.xml
     
     %Steering Update (Eq 11) 
     % delta(k+1) = delta(k) - Klat * d
-    delta_cmd = delta_prev - Klat * d_lat;
-    
+    % 
+    % delta_cmd = delta_prev - Klat * d_lat;
+    %Make the steering calmer in high speed 
+    Klat_eff = Klat / max(1.0, u * 0.1);
+    delta_cmd = delta_prev - Klat_eff * d_lat;
+
     % Saturation
     delta_max = deg2rad(35);
     delta = max(-delta_max, min(delta_cmd, delta_max));
@@ -5717,7 +5721,7 @@ __MWOPC_PART_BEGIN__ /simulink/windowsInfo.xml
           <P Name="IsActive" Class="logical">1</P>
           <P Name="IsTabbed" Class="logical">1</P>
           <P Name="ViewObjType" Class="char">StudioAdapterBlock</P>
-          <P Name="LoadSaveID" Class="char">433</P>
+          <P Name="LoadSaveID" Class="char">427</P>
           <P Name="Extents" Class="double">[2210.0, 953.0]</P>
           <P Name="ZoomFactor" Class="double">1.0</P>
           <P Name="Offset" Class="double">[0.0, 0.0]</P>
@@ -5747,8 +5751,8 @@ __MWOPC_PART_BEGIN__ /simulink/windowsInfo.xml
           <P Name="IsActive" Class="logical">0</P>
           <P Name="IsTabbed" Class="logical">0</P>
           <P Name="ViewObjType" Class="char">StudioAdapterBlock</P>
-          <P Name="LoadSaveID" Class="char">427</P>
-          <P Name="Extents" Class="double">[2522.0, 953.0]</P>
+          <P Name="LoadSaveID" Class="char">433</P>
+          <P Name="Extents" Class="double">[2210.0, 953.0]</P>
           <P Name="ZoomFactor" Class="double">1.0</P>
           <P Name="Offset" Class="double">[0.0, 0.0]</P>
           <P Name="SceneRectInView" Class="double">[0.0, 0.0, 0.0, 0.0]</P>

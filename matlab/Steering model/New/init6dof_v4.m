@@ -41,6 +41,53 @@ road_length_px = sum(sqrt(sum(diff(road).^2, 2)));
 road_scale = 5793 / road_length_px;  % metres per pixel
 road = road * road_scale;
 
+% LOOP CLOSURE: Connect end of track back to start with a smooth arc
+% This ensures the car can complete laps without hitting a dead-end.
+p_end   = road(end, :);   % last point of the extracted track
+p_start = road(1,   :);   % first point = [0, 0]
+
+% Number of connector points - more = smoother arc
+n_conn = 200;
+
+% Tangent direction at track end (for smooth departure)
+tang_end   = road(end,:) - road(end-5,:);
+tang_end   = tang_end / (norm(tang_end) + 1e-9);
+
+% Tangent direction at track start (for smooth arrival)
+tang_start = road(5,:) - road(1,:);
+tang_start = tang_start / (norm(tang_start) + 1e-9);
+
+% Connector length scales with gap distance
+gap_dist = norm(p_end - p_start);
+ctrl_len = gap_dist * 0.4;   % control-point offset
+
+% Two Bezier control points for a cubic spline connector
+cp1 = p_end   + ctrl_len * tang_end;    % depart tangentially from end
+cp2 = p_start - ctrl_len * tang_start;  % arrive tangentially at start
+
+% Cubic Bezier interpolation
+s = linspace(0, 1, n_conn)';
+conn = (1-s).^3 .* p_end + ...
+       3*(1-s).^2.*s .* cp1 + ...
+       3*(1-s).*s.^2 .* cp2 + ...
+       s.^3 .* p_start;
+
+% Append connector (skip first/last to avoid duplicate points)
+road = [road; conn(2:end-1, :)];
+
+% MULTI-LAP: Tile the complete closed loop for N laps.
+% The search window in the steering/cruise controllers is small and local,
+% so they cannot "wrap around" index N back to 1. Tiling the road means
+% prev_idx keeps incrementing naturally through lap 2, 3, etc.
+n_laps = 3;
+road_one_lap = road;
+for lap = 2:n_laps
+    road = [road; road_one_lap];
+end
+
+fprintf('Track loop closed. Laps tiled: %d | Total road points: %d | Gap: %.1f m\n', n_laps, size(road,1), gap_dist);
+
+
 % Sample time for discrete blocks (matches Simulink solver fixed step)
 dt = 0.01;  % 100ms timestep
 
@@ -55,9 +102,9 @@ steer_params.Kug  = 0.0;
 
 %Cruise Control Parameters
 cruise_params.Tp     = 3;
-cruise_params.ay_max = 7;
+cruise_params.ay_max = 15;
 cruise_params.u_min  = 2;
-cruise_params.u_max  = 20;  % 72 km/h max straight speed
+cruise_params.u_max  = 30;  %  108 km/h max straight speed
 % ADMINISTRATIVE INITIALISATION
 o4 = ones(4,1);
 TINY = 1e-5;
